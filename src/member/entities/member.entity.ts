@@ -1,19 +1,14 @@
-import { CommonEntity } from "../../product/entities/common.entity";
-import { Column, Entity } from "typeorm";
-
+import { CommonEntity } from '../../product/entities/common.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class Member extends CommonEntity {
-
   @Column()
   public name: string;
 
-  @Column()
-  public password: string;
-
-  @Column()
+  @Column({ unique: true })
   public email: string;
 
   @Column()
-  public image: string;
+  public password: string;
 }
