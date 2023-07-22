@@ -9,14 +9,20 @@ export class AuthService {
 
   async registerUser(createMemberDto: CreateMemberDto) {
     const newUser = await this.memberService.registerMember(createMemberDto);
+    newUser.password = undefined;
     return newUser;
   }
 
   async loggedInUser(loginMemberDto: LoginMemberDto) {
     const user = await this.memberService.getUserByEmail(loginMemberDto.email);
-    if (user.password !== loginMemberDto.password) {
+    // if (user.password !== loginMemberDto.password) {
+    //   throw new HttpException('Password do not match', HttpStatus.CONFLICT);
+    // }
+    const isMatchedPassword = await user.checkPassword(loginMemberDto.password);
+    if (!isMatchedPassword) {
       throw new HttpException('Password do not match', HttpStatus.CONFLICT);
     }
+
     return user;
   }
 }
