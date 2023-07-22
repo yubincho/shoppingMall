@@ -3,6 +3,8 @@ import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import * as gravatar from 'gravatar';
+import { ProviderEnum } from './provider.enum';
+import { RoleEnum } from './role.enum';
 
 @Entity()
 export class Member extends CommonEntity {
@@ -17,6 +19,21 @@ export class Member extends CommonEntity {
 
   @Column({ nullable: true })
   public profileImg?: string;
+
+  @Column({
+    type: 'enum',
+    enum: ProviderEnum,
+    default: ProviderEnum.LOCAL,
+  })
+  public provider: ProviderEnum;
+
+  @Column({
+    type: 'enum',
+    enum: RoleEnum,
+    array: true,
+    default: [RoleEnum.USER],
+  })
+  public roles: RoleEnum[]; // role - 역할이 여러개 여서 array
 
   @BeforeInsert()
   @BeforeUpdate()
