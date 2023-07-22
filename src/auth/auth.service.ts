@@ -4,6 +4,7 @@ import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { LoginMemberDto } from '../member/dto/login-member.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { TokenPayloadInterface } from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
   }
 
   async generateAccessToken(userId: string) {
-    const payload: any = { userId };
+    const payload: TokenPayloadInterface = { userId };
     const token = await this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${this.configService.get(
