@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { LoginMemberDto } from '../member/dto/login-member.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -15,10 +16,11 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  async loginUser(@Req() req: any) {
+  async loginUser(@Req() req: RequestWithUserInterface) {
     const user = req.user;
+    const token = await this.authService.generateAccessToken(user.id);
     user.password = undefined;
-    return user;
+    return { user, token };
   }
   // async loginUser(@Body() loginMemberDto: LoginMemberDto) {
   //   // return await this.authService.loggedInUser(loginMemberDto);

@@ -2,10 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MemberService } from '../member/member.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { LoginMemberDto } from '../member/dto/login-member.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly memberService: MemberService) {}
+  constructor(
+    private readonly memberService: MemberService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async registerUser(createMemberDto: CreateMemberDto) {
     const newUser = await this.memberService.registerMember(createMemberDto);
@@ -24,5 +30,16 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async generateAccessToken(userId: string) {
+    const payload: any = { userId };
+    const token = await this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}h`,
+    });
+    return token;
   }
 }
