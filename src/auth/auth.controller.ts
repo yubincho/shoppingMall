@@ -5,6 +5,7 @@ import { LoginMemberDto } from '../member/dto/login-member.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EmailVerificationDto } from '../member/dto/email-verification.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,12 +18,24 @@ export class AuthController {
     @Body('email') email: string,
     @Body('password') password: string,
   ) {
-    return await this.authService.registerUser({ name, email, password }); // dto 형태가 아닌 인자로 받을때
+    const newUser = await this.authService.registerUser({
+      name,
+      email,
+      password,
+    }); // dto 형태가 아닌 인자로 받을때
+    await this.authService.welcomeEmail(email);
+    return newUser;
   }
 
   @Post('send/email')
   async sendEmail(@Body('email') email: string) {
     return await this.authService.sendEmail(email);
+  }
+
+  @Post('verify/email')
+  async verifyEmail(@Body() emailVerificationDto: EmailVerificationDto) {
+    const { email, code } = emailVerificationDto;
+    return await this.authService.confirmEmailVerification(email, code);
   }
 
   @Post('login')

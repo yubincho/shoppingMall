@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { MemberService } from '../member/member.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { LoginMemberDto } from '../member/dto/login-member.dto';
@@ -59,6 +65,23 @@ export class AuthService {
     });
 
     return 'success';
+  }
+
+  async confirmEmailVerification(email: string, code: string) {
+    const emailCodeByRedis = await this.cacheManager.get(email);
+    if (emailCodeByRedis !== code) {
+      throw new BadRequestException('Wrong code provided');
+    }
+    await this.cacheManager.del(email);
+    return true;
+  }
+
+  async welcomeEmail(email: string) {
+    await this.emailService.senedEmail({
+      to: email,
+      subject: 'welcome to Yubins house',
+      text: '환영합니다.',
+    });
   }
 
   generateOTP() {
