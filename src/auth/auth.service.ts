@@ -1,10 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { MemberService } from '../member/member.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
 import { LoginMemberDto } from '../member/dto/login-member.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TokenPayloadInterface } from './interfaces/tokenPayload.interface';
+import { EmailService } from '../email/email.service';
+import { CACHE_MANAGER } from '@nestjs/common/cache';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +15,8 @@ export class AuthService {
     private readonly memberService: MemberService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly emailService: EmailService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async registerUser(createMemberDto: CreateMemberDto) {
@@ -44,5 +49,23 @@ export class AuthService {
     return token;
   }
 
-  async sendEmail(email: string) {}
+  async sendEmail(email: string) {
+    const generateNumber = this.generateOTP();
+    await this.cacheManager.set(email, generateNumber);
+    await this.emailService.senedEmail({
+      to: email,
+      subject: '[유빈의집] 인증코드 안내',
+      text: `confirm number is ${generateNumber}`,
+    });
+
+    return 'success';
+  }
+
+  generateOTP() {
+    let OTP = '';
+    for (let i = 1; i <= 6; i++) {
+      OTP += Math.floor(Math.random() * 10);
+    }
+    return OTP;
+  }
 }

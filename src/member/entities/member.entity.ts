@@ -20,6 +20,9 @@ export class Member extends CommonEntity {
   @Column({ nullable: true })
   public profileImg?: string;
 
+  @Column({ nullable: true })
+  public emailVerificationNum: string;
+
   @Column({
     type: 'enum',
     enum: ProviderEnum,

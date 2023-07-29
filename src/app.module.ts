@@ -8,6 +8,7 @@ import * as Joi from '@hapi/joi';
 import { MemberModule } from './member/member.module';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -23,6 +24,11 @@ import { EmailModule } from './email/email.module';
         EMAIL_SERVICE: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_USER: Joi.string().required(),
+        REDIS_PASSWORD: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
+        REDIS_TTL: Joi.number().required(),
       }),
     }),
     ProductModule,
@@ -30,6 +36,7 @@ import { EmailModule } from './email/email.module';
     DatabaseModule,
     AuthModule,
     EmailModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
