@@ -11,8 +11,18 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async createUser(@Body() createMemberDto: CreateMemberDto) {
-    return await this.authService.registerUser(createMemberDto);
+  // async createUser(@Body() createMemberDto: CreateMemberDto) {
+  async createUser(
+    @Body('name') name: string,
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ) {
+    return await this.authService.registerUser({ name, email, password }); // dto 형태가 아닌 인자로 받을때
+  }
+
+  @Post('send/email')
+  async sendEmail(@Body('email') email: string) {
+    return await this.authService.sendEmail(email);
   }
 
   @Post('login')

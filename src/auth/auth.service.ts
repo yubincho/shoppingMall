@@ -43,4 +43,6 @@ export class AuthService {
     });
     return token;
   }
+
+  async sendEmail(email: string) {}
 }

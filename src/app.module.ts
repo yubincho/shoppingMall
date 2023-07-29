@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import * as Joi from '@hapi/joi';
 import { MemberModule } from './member/member.module';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -19,12 +20,16 @@ import { AuthModule } from './auth/auth.module';
         POSTGRES_DB: Joi.string().required(),
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
         JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().required(),
+        EMAIL_SERVICE: Joi.string().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
       }),
     }),
     ProductModule,
     MemberModule,
     DatabaseModule,
     AuthModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
