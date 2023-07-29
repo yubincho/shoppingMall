@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import * as process from "process";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,14 +15,12 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
           username: cfg.get('POSTGRES_USERNAME'),
           password: cfg.get('POSTGRES_PASSWORD'),
           database: cfg.get('POSTGRES_DB'),
-          entities: [
-            __dirname + '/../**/*.entities{.ts,.js}'
-          ],
+          entities: [__dirname + '/../**/*.entities{.ts,.js}'],
           autoLoadEntities: true,
-          synchronize: true
+          synchronize: true,
         } as TypeOrmModuleOptions;
-      }
-    })
-  ]
+      },
+    }),
+  ],
 })
 export class DatabaseModule {}
