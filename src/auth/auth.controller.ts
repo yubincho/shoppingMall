@@ -25,7 +25,7 @@ export class AuthController {
   // async createUser(@Body() createMemberDto: CreateMemberDto) {
   async createUser(@Body() createMemberDto: CreateMemberDto) {
     const newUser = await this.authService.registerUser(createMemberDto); // dto 형태가 아닌 인자로 받을때
-    await this.authService.welcomeEmail(createMemberDto.email);
+    // await this.authService.welcomeEmail(createMemberDto.email);
     return newUser;
   }
 
@@ -68,7 +68,9 @@ export class AuthController {
   @Get('kakao/callback')
   @UseGuards(KakaoAuthGuard)
   async kakaoLoginCallback(@Req() req: RequestWithUserInterface) {
-    return req.user;
+    const { user } = req;
+    const token = await this.authService.generateAccessToken(user.id);
+    return { user, token };
   }
 
   @HttpCode(200)

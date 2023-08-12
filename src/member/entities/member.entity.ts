@@ -14,21 +14,18 @@ export class Member extends CommonEntity {
   @Column({ unique: true })
   public email: string;
 
-  @Column()
-  public password: string;
+  @Column({ nullable: true })
+  public password?: string;
 
   @Column({ nullable: true })
   public profileImg?: string;
-
-  @Column({ nullable: true })
-  public emailVerificationNum: string;
 
   @Column({
     type: 'enum',
     enum: ProviderEnum,
     default: ProviderEnum.LOCAL,
   })
-  public provider: ProviderEnum;
+  public provider?: ProviderEnum;
 
   @Column({
     type: 'enum',
@@ -42,18 +39,26 @@ export class Member extends CommonEntity {
   @BeforeUpdate()
   async beforeFunction(): Promise<void> {
     try {
-      // profile image 자동 생성
-      this.profileImg = gravatar.url(this.email, {
-        s: '200',
-        r: 'pg',
-        d: 'mm',
-        protocol: 'https',
-      });
+      if (this.provider !== ProviderEnum.LOCAL) {
+        return;
+      } else {
+        // profile image 자동 생성
+        this.profileImg = gravatar.url(this.email, {
+          s: '200',
+          r: 'pg',
+          d: 'mm',
+          protocol: 'https',
+        });
+        // password 암호화
+        const saltValue = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(this.password, saltValue);
+        this.password = hashedPassword;
+      }
 
       // password 암호화
-      const saltValue = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(this.password, saltValue);
-      this.password = hashedPassword;
+      // const saltValue = await bcrypt.genSalt(10);
+      // const hashedPassword = await bcrypt.hash(this.password, saltValue);
+      // this.password = hashedPassword;
     } catch (err) {
       console.log(err.message);
       throw new InternalServerErrorException();
