@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthStrategy } from './strategies/jwt-auth.strategy';
 import { EmailModule } from '../email/email.module';
 import { KakaoAuthStrategy } from './strategies/kakao-auth.strategy';
+import { NaverAuthStrategy } from './strategies/naver-auth.strategy';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { KakaoAuthStrategy } from './strategies/kakao-auth.strategy';
     LocalAuthStrategy,
     JwtAuthStrategy,
     KakaoAuthStrategy,
+    NaverAuthStrategy,
   ],
 })
 export class AuthModule {}

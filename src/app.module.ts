@@ -21,16 +21,23 @@ import { RedisModule } from './redis/redis.module';
         POSTGRES_DB: Joi.string().required(),
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
         JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().required(),
+
         EMAIL_SERVICE: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
+
         REDIS_HOST: Joi.string().required(),
         REDIS_USER: Joi.string().required(),
         REDIS_PASSWORD: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
         REDIS_TTL: Joi.number().required(),
+
         KAKAO_CLIENT_ID: Joi.string().required(),
         KAKAO_CALLBACK_URL: Joi.string().required(),
+
+        NAVER_CLIENT_ID: Joi.string().required(),
+        NAVER_CLIENT_SECRET: Joi.string().required(),
+        NAVER_CALLBACK_URL: Joi.string().required(),
       }),
     }),
     ProductModule,

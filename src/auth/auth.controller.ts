@@ -15,6 +15,7 @@ import { RequestWithUserInterface } from './interfaces/requestWithUser.interface
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { EmailVerificationDto } from '../member/dto/email-verification.dto';
 import { KakaoAuthGuard } from './guards/kakao-auth.guard';
+import { NaverAuthGuard } from './guards/naver-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -67,6 +68,19 @@ export class AuthController {
   @Get('kakao/callback')
   @UseGuards(KakaoAuthGuard)
   async kakaoLoginCallback(@Req() req: RequestWithUserInterface) {
+    return req.user;
+  }
+
+  @HttpCode(200)
+  @Get('naver')
+  @UseGuards(NaverAuthGuard)
+  async naverLogin() {
+    return HttpStatus.OK;
+  }
+
+  @Get('naver/callback')
+  @UseGuards(NaverAuthGuard)
+  async naverLoginCallback(@Req() req: RequestWithUserInterface) {
     return req.user;
   }
 }
