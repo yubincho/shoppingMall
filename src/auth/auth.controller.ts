@@ -83,6 +83,10 @@ export class AuthController {
   @Get('naver/callback')
   @UseGuards(NaverAuthGuard)
   async naverLoginCallback(@Req() req: RequestWithUserInterface) {
-    return req.user;
+    const { user } = req;
+    const token = await this.authService.generateAccessToken(user.id);
+    return { user, token };
   }
+
+  // 구글 : passport-google-oauth2 로 설치
 }
