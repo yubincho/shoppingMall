@@ -1,11 +1,20 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateMemberDto } from '../member/dto/create-member.dto';
-import { LoginMemberDto } from '../member/dto/login-member.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RequestWithUserInterface } from './interfaces/requestWithUser.interface';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { EmailVerificationDto } from '../member/dto/email-verification.dto';
+import { KakaoAuthGuard } from './guards/kakao-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -13,17 +22,9 @@ export class AuthController {
 
   @Post('signup')
   // async createUser(@Body() createMemberDto: CreateMemberDto) {
-  async createUser(
-    @Body('name') name: string,
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    const newUser = await this.authService.registerUser({
-      name,
-      email,
-      password,
-    }); // dto 형태가 아닌 인자로 받을때
-    await this.authService.welcomeEmail(email);
+  async createUser(@Body() createMemberDto: CreateMemberDto) {
+    const newUser = await this.authService.registerUser(createMemberDto); // dto 형태가 아닌 인자로 받을때
+    await this.authService.welcomeEmail(createMemberDto.email);
     return newUser;
   }
 
@@ -53,6 +54,19 @@ export class AuthController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async getUserInfo(@Req() req: RequestWithUserInterface) {
+    return req.user;
+  }
+
+  @HttpCode(200)
+  @Get('kakao')
+  @UseGuards(KakaoAuthGuard)
+  async kakaoLogin() {
+    return HttpStatus.OK;
+  }
+
+  @Get('kakao/callback')
+  @UseGuards(KakaoAuthGuard)
+  async kakaoLoginCallback(@Req() req: RequestWithUserInterface) {
     return req.user;
   }
 }

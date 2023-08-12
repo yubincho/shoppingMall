@@ -29,6 +29,8 @@ import { RedisModule } from './redis/redis.module';
         REDIS_PASSWORD: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
         REDIS_TTL: Joi.number().required(),
+        KAKAO_CLIENT_ID: Joi.string().required(),
+        KAKAO_CALLBACK_URL: Joi.string().required(),
       }),
     }),
     ProductModule,

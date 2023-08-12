@@ -58,7 +58,7 @@ export class AuthService {
   async sendEmail(email: string) {
     const generateNumber = this.generateOTP();
     await this.cacheManager.set(email, generateNumber);
-    await this.emailService.senedEmail({
+    await this.emailService.sendEmail({
       to: email,
       subject: '[유빈의집] 인증코드 안내',
       text: `confirm number is ${generateNumber}`,
@@ -77,7 +77,7 @@ export class AuthService {
   }
 
   async welcomeEmail(email: string) {
-    await this.emailService.senedEmail({
+    await this.emailService.sendEmail({
       to: email,
       subject: 'welcome to Yubins house',
       text: '환영합니다.',
