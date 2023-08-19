@@ -33,7 +33,7 @@ export class ProductController {
   }
 
   @Post('create')
-  @UseGuards(RoleGuard(RoleEnum.ADMIN))
+  // @UseGuards(RoleGuard(RoleEnum.ADMIN))
   async productCreate(@Body() createProductDto: CreateProductDto) {
     const newProduct = await this.productService.createProduct(
       createProductDto,

@@ -9,6 +9,7 @@ import { MemberModule } from './member/member.module';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { RedisModule } from './redis/redis.module';
+import { BrandModule } from './brand/brand.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { RedisModule } from './redis/redis.module';
     AuthModule,
     EmailModule,
     RedisModule,
+    BrandModule,
   ],
   controllers: [AppController],
   providers: [AppService],
