@@ -16,6 +16,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { EmailVerificationDto } from '../member/dto/email-verification.dto';
 import { KakaoAuthGuard } from './guards/kakao-auth.guard';
 import { NaverAuthGuard } from './guards/naver-auth.guard';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -89,4 +90,19 @@ export class AuthController {
   }
 
   // 구글 : passport-google-oauth2 로 설치
+  @HttpCode(200)
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  async googleLogin() {
+    return HttpStatus.OK;
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleLoginCallback(@Req() req: RequestWithUserInterface) {
+    // return req.user;
+    const { user } = req;
+    const token = await this.authService.generateAccessToken(user.id);
+    return { user, token };
+  }
 }
