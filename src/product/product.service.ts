@@ -20,7 +20,12 @@ export class ProductService {
   }
 
   async getByIdOfProduct(id: string) {
-    const product = await this.productRepository.findOneById(id);
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: ['brand'],
+    });
+    console.log(product.brand);
+    // return
     return product;
   }
 

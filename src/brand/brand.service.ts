@@ -16,4 +16,20 @@ export class BrandService {
     await this.brandRepository.save(newBrand);
     return newBrand;
   }
+
+  async getAllBrand() {
+    const brands = await this.brandRepository.find({
+      relations: ['products'],
+    });
+    return brands;
+  }
+
+  async getByIdOfBrand(id: string) {
+    const brand = await this.brandRepository.findOne({
+      where: { id },
+      relations: ['products'],
+    });
+
+    return brand;
+  }
 }
