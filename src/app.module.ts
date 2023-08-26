@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { RedisModule } from './redis/redis.module';
 import { BrandModule } from './brand/brand.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { BrandModule } from './brand/brand.module';
     EmailModule,
     RedisModule,
     BrandModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

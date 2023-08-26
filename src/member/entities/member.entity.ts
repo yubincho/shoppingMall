@@ -1,10 +1,11 @@
 import { CommonEntity } from '../../product/entities/common.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import * as gravatar from 'gravatar';
 import { ProviderEnum } from './provider.enum';
 import { RoleEnum } from './role.enum';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class Member extends CommonEntity {
@@ -34,6 +35,9 @@ export class Member extends CommonEntity {
     default: [RoleEnum.USER],
   })
   public roles: RoleEnum[]; // role - 역할이 여러개 여서 array
+
+  @OneToMany(() => Comment, (comment: Comment) => comment.user)
+  public comments: Comment[];
 
   @BeforeInsert()
   @BeforeUpdate()
